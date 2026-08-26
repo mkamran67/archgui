@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum SupportStatus {
+  STABLE
+  BETA
+  EXPERIMENTAL
+}
+
+model App {
+  id             String            @id @default(uuid()) @db.Uuid
+  slug           String            @unique
+  name           String
+  tagline        String
+  category       String
+  description    String            @db.Text
+  repositoryUrl  String
+  license        String
+  starCount      Int?
+  imageUrl       String
+  features       Feature[]
+  requirements   Requirement[]
+  distributions AppDistribution[]
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+
+  @@index([category])
+  @@map("apps")
+}
+
+model Feature {
+  id       String @id @default(uuid()) @db.Uuid
+  text     String
+  position Int
+  appId    String @db.Uuid
+  app      App    @relation(fields: [appId], references: [id], onDelete: Cascade)
+
+  @@unique([appId, position])
+  @@map("features")
+}
+
+model Requirement {
+  id       String @id @default(uuid()) @db.Uuid
+  label    String
+  value    String
+  position Int
+  appId    String @db.Uuid
+  app      App    @relation(fields: [appId], references: [id], onDelete: Cascade)
+
+  @@unique([appId, position])
+  @@map("requirements")
+}
+
+model Distribution {
+  id   String @id @default(uuid()) @db.Uuid
+  name String @unique
+  apps AppDistribution[]
+
+  @@map("distributions")
+}
+
+model AppDistribution {
+  id             String        @id @default(uuid()) @db.Uuid
+  appId          String        @db.Uuid
+  distributionId String        @db.Uuid
+  status         SupportStatus
+  app            App           @relation(fields: [appId], references: [id], onDelete: Cascade)
+  distribution   Distribution  @relation(fields: [distributionId], references: [id], onDelete: Restrict)
+
+  @@unique([appId, distributionId])
+  @@map("app_distributions")
+}
