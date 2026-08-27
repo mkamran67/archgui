@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ink-950: 13 15 13;
+  --ink-900: 18 20 15;
+  --ink-800: 26 29 24;
+  --ink-700: 35 39 32;
+  --ink-600: 47 52 43;
+  --ink-500: 74 81 66;
+  --cream-50: 247 244 236;
+  --cream-100: 239 234 219;
+  --cream-200: 224 216 191;
+  --lime-400: 167 224 74;
+  --lime-500: 136 191 47;
+  --lime-600: 136 191 47;
+  --rust-500: 224 99 42;
+  --rust-600: 184 76 26;
+}
+
+.light {
+  --ink-950: 247 246 242;
+  --ink-900: 255 255 255;
+  --ink-800: 233 230 222;
+  --ink-700: 217 213 202;
+  --ink-600: 178 173 158;
+  --ink-500: 138 133 120;
+  --cream-50: 23 25 19;
+  --cream-100: 76 78 67;
+  --cream-200: 111 113 100;
+  --lime-400: 101 163 13;
+  --lime-500: 77 124 15;
+  --lime-600: 63 98 18;
+  --rust-500: 194 65 12;
+  --rust-600: 154 52 18;
+}
+
+html, body { background: rgb(var(--ink-950)); color: rgb(var(--cream-50)); }
+body { font-family: 'Space Grotesk', system-ui, sans-serif; }
+
+.grid-bg {
+  background-image:
+    linear-gradient(rgb(var(--lime-400) / 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--lime-400) / 0.06) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+.noise::before {
+  content: "";
+  position: absolute; inset: 0; pointer-events: none;
+  background-image: radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 3px 3px;
+  mix-blend-mode: overlay;
+}
+
+.blink { animation: blink 1s steps(2, start) infinite; }
+@keyframes blink { to { visibility: hidden; } }
+
+.marquee { animation: marquee 40s linear infinite; }
+@keyframes marquee { from { transform: translateX(0);} to { transform: translateX(-50%);} }
